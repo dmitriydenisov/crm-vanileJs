@@ -4,19 +4,20 @@
     const database = {
         lastReviewed: {
             maxLength: 4,
-            orderIds: [1, 2, 3, 4]
+            orderIds: []
         },
-        orders: [
-            { id: 1, fullname: "Дмитрий Денисов", good: "Бумага для принтера", price: 500, status: "new", date: Date.now() },
-            { id: 2, fullname: "Алексей Данчин", good: "Краска для принтера", price: 1500, status: "process", date: Date.now() },
-            { id: 3, fullname: "Илья Муромец", good: "Принтер", price: 11500, status: "back", date: Date.now() }
-        ]
+        orders: []
     }
+
+    load()
 
     const api = new EventEmitter
 
     api.generate = function generate (orders) {
         database.orders = getCopy(orders)
+
+        save()
+        api.emit('update')
     }
 
     api.getOrderById = function getOrderById (id) {
@@ -34,6 +35,7 @@
         return database.lastReviewed.orderIds.map(x => api.getOrderById(x))
     }
 
+    //функция добавления последних заказов в список
     api.addLastReviewed = function addLastReviewed (orderId) {
         //если есть такая запись
         if(database.lastReviewed.orderIds.includes(orderId)) { 
@@ -47,6 +49,7 @@
             database.lastReviewed.orderIds = [orderId, ...database.lastReviewed.orderIds].slice(0, database.lastReviewed.maxLength)
         }     
 
+        save()
         api.emit('update')
     }
 
@@ -54,5 +57,17 @@
 
    function getCopy (x) {
        return JSON.parse(JSON.stringify(x))
+   }
+
+   function save () {
+       localStorage.setItem('__CRM_DATABASE__', JSON.stringify(database))
+   }
+
+   function load (){
+       //проверяем, есть ли в localStorage строка содержащая '__CRM_DATABASE__'
+       if (localStorage.getItem('__CRM_DATABASE__')) {
+           //если есть, то мы запрашиваем БД и распарсиваем и получаем объект БД и сливаем БД
+           Object.assign(database, JSON.parse(localStorage.getItem('__CRM_DATABASE__')))
+       }
    }
 })();

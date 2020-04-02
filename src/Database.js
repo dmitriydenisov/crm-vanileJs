@@ -45,6 +45,7 @@
         if (state.mindate) {
             orders = orders.filter(x => x.date >= state.mindate)
         }
+        console.log(state.mindate)
         if (state.maxdate) {
             orders = orders.filter(x => x.date <= state.maxdate)
         }

@@ -16,8 +16,7 @@ function init () {
         setState({
             orderId: hashObject.orderId
         }) 
-    }
-    
+    }    
 }
 
 function update (){

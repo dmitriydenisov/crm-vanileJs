@@ -45,16 +45,17 @@
         if (state.mindate) {
             orders = orders.filter(x => x.date >= state.mindate)
         }
-        console.log(state.mindate)
         if (state.maxdate) {
             orders = orders.filter(x => x.date <= state.maxdate)
         }
 
         return {
-            orders: orders.slice(0, database.maxOrders),
-            currentPage: 1,
+            //расчет общего количества элементов
+            orders: orders.slice((state.currentPage - 1) * database.maxOrders, state.currentPage * database.maxOrders),
+            currentPage: state.currentPage,
+            //расчет количества элементов на одной странице 
             commonPages: Math.ceil(orders.length / database.maxOrders)
-        }
+        }        
     }
 
     api.getOrderById = function getOrderById (id) {

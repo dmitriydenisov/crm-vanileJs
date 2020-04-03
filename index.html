@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>СРМ</title>
+	<title>CRM</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" href="style.css">
@@ -199,13 +199,15 @@
 				</div>
 				<nav aria-label="Page navigation example">
 					<ul class="pagination justify-content-center">
-					  <li class="page-item disabled">
-						<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a>
+					  <li class="page-item" data-pagenav-prev>
+						<a class="page-link" href="#" tabindex="-1">Назад</a>
 					  </li>
-					  <li class="page-item active"><a class="page-link" href="#">1</a></li>
-					  <li class="page-item"><a class="page-link" href="#">2</a></li>
-					  <li class="page-item"><a class="page-link" href="#">3</a></li>
-					  <li class="page-item">
+					<span class="d-flex flex-r" data-pagination>
+						<li class="page-item active"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+					</span>
+					  <li class="page-item" data-pagenav-next>
 						<a class="page-link" href="#">Вперед</a>
 					  </li>
 					</ul>

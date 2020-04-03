@@ -23,6 +23,7 @@ update ()
 function init () {
     const hashObject = Router.getHashObject()
 
+    //получаем зеачение фильтра из адресной строки
     byFilterNames(filterName =>{
         if(hashObject[filterName]) {
             document.querySelector(`[data-filter-${filterName}]`).value = hashObject[filterName]
@@ -32,9 +33,9 @@ function init () {
        const element = document.querySelector(`[data-filter-${filterName}]`)
 
        element.addEventListener('keyup', handler)  
-       element.addEventListener('change', handler)  
+       element.addEventListener('change', handler)   
 
-       function handler () {
+        function handler () {
             if (this.value) {
                 setState ({
                     [filterName]: this.value
@@ -44,10 +45,43 @@ function init () {
                     [filterName]: null
                 })
             }
-        }   
+        } 
     })
 
+    //получаем из адресной строки значение текущей страницы 
+    if(hashObject.currentPage) {
+        state.currentPage = hashObject.currentPage
+    }
+
+     
+
+    //обработка событий кнопок вперед и назад
+    document.querySelector('[data-pagenav-prev]').addEventListener('click', event => {
+        event.preventDefault()
+        setState({
+            currentPage: state.currentPage - 1
+        })
+    })
+    document.querySelector('[data-pagenav-next]').addEventListener('click', event => {
+        event.preventDefault()
+        console.log('done')
+        setState({
+            currentPage: state.currentPage + 1
+        })
+    })
+
+    document.querySelector('[data-pagination]').addEventListener('click', event => {
+        event.preventDefault()
+        const pageNumber = parseInt(event.target.textContent)
+        setState({
+            currentPage: pageNumber
+        })
+    })
 }
+
+// function formatDate () {
+//     const date = new Date(this.value)
+// }
 
 function update (){
     updateLastReviewedList()
@@ -65,6 +99,7 @@ function update (){
     state.commonPages = answer.commonPages   
 
     updateTable()
+    updatePagination() 
 }
 
 function setState (obj) {
@@ -72,6 +107,12 @@ function setState (obj) {
 
     const hashObject = {}
 
+    //передаем в адресную строку значение текущей страницы
+    if(state.currentPage !== 1) {
+        hashObject.currentPage = state.currentPage
+    }
+
+    //передаем зеачение фильтра в адресную строку
     byFilterNames(filterName =>{
         if(state[filterName]) {
             hashObject[filterName] = state[filterName]
@@ -125,5 +166,40 @@ function byFilterNames (handler) {
     const filterNames = ['fullname', 'good', 'status', 'minprice', 'maxprice', 'mindate', 'maxdate']
     for (const filterName of filterNames) {
         handler(filterName)
+    }
+}
+
+function updatePagination() {
+    const numbersMounte = document.querySelector('[data-pagination]')
+    const prevButton = document.querySelector('[data-pagenav-prev]')
+    const nextButton = document.querySelector('[data-pagenav-next]')
+
+    numbersMounte.innerHTML = ''
+
+    for(let i = 0; i < state.commonPages; i++) {
+        const liElement = document.createElement('li')
+        liElement.classList.add('page-item')
+
+        if(state.currentPage === i + 1) {
+            liElement.classList.add('active')
+        }
+
+        const aElement = document.createElement('a')
+        aElement.classList.add('page-link')
+        aElement.setAttribute('href', '#')
+        aElement.textContent = i + 1
+        
+        liElement.append(aElement)
+        numbersMounte.append(liElement)
+    }
+
+    prevButton.classList.remove('disabled')
+    nextButton.classList.remove('disabled')
+
+    if(state.currentPage === 1) {
+        prevButton.classList.add('disabled')
+    }
+    if(state.currentPage === state.commonPages) {
+        nextButton.classList.add('disabled')
     }
 }

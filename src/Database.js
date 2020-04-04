@@ -20,6 +20,30 @@
         save()
         api.emit('update')
     }
+    api.updateOrderById = function updateOrderById (orderId, updated) {
+        const order = database.orders.find(x => x.id === orderId) //ищем заказ по ID
+
+        //обновляем данные
+        order.fullname = updated.fullname 
+        order.goods = updated.goods 
+        order.price = updated.price 
+        order.status = updated.status 
+        order.date = updated.date 
+
+        //сохраняем новые данные в БД
+        save()
+    }
+
+    api.createOrder = function createOrder(order) {
+        order = getCopy(order)
+        order.status = 'new'
+        order.date = Date.now()
+        order.id = Math.max(0, ...database.orders.map(x => x.id)) + 1
+        database.orders.push(order)
+        save()
+        api.emit('update')
+        return order.id
+    }
 
     api.getOrders = function getOrders (state) {
         state = getCopy(state)
@@ -60,6 +84,7 @@
 
     api.getOrderById = function getOrderById (id) {
         const order = database.orders.find(x => x.id === id)
+        
        
         if (order) {
             return getCopy(order)

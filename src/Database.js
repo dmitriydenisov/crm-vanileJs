@@ -67,9 +67,17 @@
             orders = orders.filter(x => x.price <= state.maxprice)
         }
         if (state.mindate) {
+            if (typeof state.mindate === 'string') {
+                state.mindate = (new Date(state.mindate)).getTime()
+            }
+
             orders = orders.filter(x => x.date >= state.mindate)
         }
         if (state.maxdate) {
+            if (typeof state.maxdate === 'string') {
+                state.maxdate = (new Date(state.maxdate)).getTime()
+            }
+
             orders = orders.filter(x => x.date <= state.maxdate)
         }
 

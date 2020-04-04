@@ -33,7 +33,7 @@ function init () {
        const element = document.querySelector(`[data-filter-${filterName}]`)
 
        element.addEventListener('keyup', handler)  
-       element.addEventListener('change', formatDate, handler)   
+       element.addEventListener('change', handler)   
 
         function handler () {
             if (this.value) {
@@ -46,13 +46,6 @@ function init () {
                 })
             }
         } 
-
-        function formatDate () {
-            const date = new Date(this.value)
-            setState ({
-                mindate: date.getTime()
-            })
-}
     })
 
     //получаем из адресной строки значение текущей страницы 
@@ -85,8 +78,6 @@ function init () {
         })
     })
 }
-
-
 
 function update (){
     updateLastReviewedList()

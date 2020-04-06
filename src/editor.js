@@ -13,6 +13,7 @@ function init () {
     const hashObject = Router.getHashObject()
 
     if (hashObject.orderId){
+        Database.addLastReviewed(hashObject.orderId)
 
         setState({
             orderId: hashObject.orderId
@@ -48,6 +49,7 @@ function update (){
     
     state.order = Database.getOrderById(hashObject.orderId)
 
+    document.querySelector('[data-title]').textContent = state.order.fullname
     document.querySelector('[data-fullname]').textContent = state.order.fullname
     document.querySelector('[data-order-id]').value = state.order.id
     document.querySelector('[data-order-fullname]').value = state.order.fullname
